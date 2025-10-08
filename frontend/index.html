@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Locadora de Carros</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { color: #333; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h1>Veículos</h1>
+  <table id="vehicles-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Ano</th>
+        <th>Placa</th>
+        <th>Preço Diário</th>
+        <th>Disponível</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h1>Clientes</h1>
+  <table id="clients-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Telefone</th>
+        <th>Documento</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h1>Locações</h1>
+  <table id="rentals-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Cliente ID</th>
+        <th>Veículo ID</th>
+        <th>Início</th>
+        <th>Fim</th>
+        <th>Preço Total</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const backendUrl = 'http://localhost:4000';
+
+    async function fetchAndRender(endpoint, tableId) {
+      const res = await fetch(`${backendUrl}/api/${endpoint}`);
+      const data = await res.json();
+      const tbody = document.querySelector(`#${tableId} tbody`);
+      tbody.innerHTML = '';
+      data.forEach(item => {
+        const row = document.createElement('tr');
+        Object.values(item).forEach(val => {
+          const td = document.createElement('td');
+          td.textContent = val;
+          row.appendChild(td);
+        });
+        tbody.appendChild(row);
+      });
+    }
+
+    fetchAndRender('vehicles', 'vehicles-table');
+    fetchAndRender('clients', 'clients-table');
+    fetchAndRender('rentals', 'rentals-table');
+  </script>
+</body>
+</html>
